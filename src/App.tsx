@@ -1,11 +1,14 @@
 import React from 'react'
-import './App.css'
+import {CustomTable} from './exports'
+import {Box, Container} from '@mui/material'
 
 function App() {
     return (
-        <div className="App">
-            App
-        </div>
+        <Container maxWidth='lg'>
+            <Box py={3}>
+                <CustomTable/>
+            </Box>
+        </Container>
     )
 }
 
