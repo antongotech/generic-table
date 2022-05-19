@@ -1,9 +1,31 @@
 import React from 'react'
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from '@mui/material'
-import {GenericCell, data} from '../exports'
+import {GenericCell, IRow} from '../exports'
+import {Draggable, Droppable} from 'react-beautiful-dnd'
 
-const CustomTable = () => {
-    const {rows, cols} = data
+const ListEl: React.FC<IRow> = ({id, type, value, index}) => {
+    return (
+        <Draggable draggableId={id} index={index}>
+            {(provided, snapshot, rubric) => (
+                <TableRow
+                    key={id}
+                    sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                >
+                    <GenericCell heading data={`${index} -${type}`}/>
+                    <GenericCell data={value}/>
+                </TableRow>
+            )}
+        </Draggable>
+    )
+}
+
+const CustomTable: React.FC<{ state: any }> = ({state}) => {
+    const tableCol = state.lists.tableItems
+
+    const tableItems = tableCol.listIds.map((item: any) => state.tableItems[item])
 
     return (
         <TableContainer component={Paper}>
@@ -11,26 +33,31 @@ const CustomTable = () => {
                 <TableHead>
                     <TableRow>
                         {
-                            cols.map((col) => col === 'String'
+                            ['Type', 'Value'].map((col) => col === 'Type'
                                 ? <GenericCell key={col} heading data={col}/>
                                 : <GenericCell key={col} data={col}/>)
                         }
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.str}
-                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                <Droppable droppableId='draggableTable'>
+                    {(provided) => (
+                        <TableBody
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
                         >
-                            <GenericCell heading data={row.str}/>
-                            <GenericCell data={row.num}/>
-                            <GenericCell data={row.bool}/>
-                            <GenericCell data={row.date}/>
-                            <GenericCell data={row.other}/>
-                        </TableRow>
-                    ))}
-                </TableBody>
+                            {tableItems.map((item: any, index: number) => (
+                                <ListEl
+                                    key={item.id}
+                                    index={index}
+                                    id={item.id}
+                                    value={item.value}
+                                    type={item.type}
+                                />
+                            ))}
+                            {provided.placeholder}
+                        </TableBody>
+                    )}
+                </Droppable>
             </Table>
         </TableContainer>
     )
