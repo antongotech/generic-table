@@ -12,8 +12,13 @@ const randomValueGenerator = (type: string) => {
             return randomStrings[Math.floor(Math.random() * (randomStrings.length))]
         case 'Number':
             return Math.floor(Math.random() * (100 - 1) + 1)
+        case 'Boolean':
+            return Math.floor(Math.random() * (100 - 1) + 1) % 2 === 0
+        case 'Date':
+            const date = new Date
+            return date.toString()
         default:
-            return 42
+            return 'Wrong data format'
     }
 }
 

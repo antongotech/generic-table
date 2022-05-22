@@ -1,18 +1,9 @@
-import React, {useState} from 'react'
-import {Typography, Paper, styled} from '@mui/material'
-import {CellsController, data} from '../exports'
+import React from 'react'
+import {Typography} from '@mui/material'
+import {CellsController, SidebarItem} from '../../exports'
 import {Draggable, Droppable} from 'react-beautiful-dnd'
 
-const Item = styled(Paper)(({theme}) => ({
-    ...theme.typography.body2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    height: 60,
-    lineHeight: '60px',
-    margin: '10px 0',
-}))
-
-const Sidebar: React.FC<{ state: any }> = ({state}) => {
+const Sidebar: React.FC<{ state: any, types: any, setTypes: Function }> = ({state, types, setTypes}) => {
 
     const typesCol = state.lists.cellTypes
     const typesItems = typesCol.listIds.map((item: any) => state.cellTypes[item])
@@ -32,13 +23,13 @@ const Sidebar: React.FC<{ state: any }> = ({state}) => {
                             {typesItems.map((item: any, index: number) => (
                                 <Draggable key={item.id} draggableId={item.id} index={index}>
                                     {provided => (
-                                        <Item
+                                        <SidebarItem
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                             ref={provided.innerRef}
                                         >
                                             {item.type}
-                                        </Item>
+                                        </SidebarItem>
                                     )}
                                 </Draggable>
                             ))}
@@ -46,7 +37,7 @@ const Sidebar: React.FC<{ state: any }> = ({state}) => {
                         </div>
                     )}
                 </Droppable>
-                <CellsController/>
+                <CellsController types={types} setTypes={setTypes}/>
             </div>
         </div>
     )
