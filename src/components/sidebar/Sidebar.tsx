@@ -3,7 +3,7 @@ import {Typography} from '@mui/material'
 import {CellsController, SidebarItem} from '../../exports'
 import {Draggable, Droppable} from 'react-beautiful-dnd'
 
-const Sidebar: React.FC<{ state: any}> = ({state}) => {
+const Sidebar: React.FC<{ state: any, onFiltersChange: Function }> = ({state, onFiltersChange}) => {
 
     return (
         <div>
@@ -34,7 +34,7 @@ const Sidebar: React.FC<{ state: any}> = ({state}) => {
                         </div>
                     )}
                 </Droppable>
-                <CellsController />
+                <CellsController state={state} onFiltersChange={onFiltersChange}/>
             </div>
         </div>
     )

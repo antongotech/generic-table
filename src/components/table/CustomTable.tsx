@@ -29,7 +29,7 @@ const CustomTable: React.FC<{ state: any }> = ({state}) => {
                             {...provided.droppableProps}
                         >
                             {state.tableItems.map((item: any, index: number) => (
-                                <CustomRow
+                                item.show && <CustomRow
                                     key={item.id}
                                     index={index}
                                     id={item.id}

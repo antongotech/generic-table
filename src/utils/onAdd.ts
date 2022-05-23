@@ -1,7 +1,6 @@
 import {IData, ITableItem, randomValueGenerator} from '../exports'
 
 const onAdd = (state: IData, arrayTo: string, arrayFrom: string, expectedPosition: number, itemType: string) => {
-    console.log(arrayFrom, arrayTo, expectedPosition, itemType)
 
     // @ts-ignore
     const items = state[arrayTo]
@@ -11,7 +10,8 @@ const onAdd = (state: IData, arrayTo: string, arrayFrom: string, expectedPositio
     const newItem: ITableItem = {
         id: `item-${itemsLength + 1}`,
         type: itemType,
-        value: randomValueGenerator(itemType)
+        value: randomValueGenerator(itemType),
+        show: true,
     }
 
     items.splice(expectedPosition, 0, newItem)

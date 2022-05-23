@@ -1,9 +1,9 @@
-import {ICellType, ISortType, ITableItem} from "../exports";
+import {ICellType, IFilterType, ITableItem} from '../exports'
 
 interface IData {
     cellTypes: ICellType[]
     tableItems: ITableItem[]
-    sortTypes: ISortType[]
+    filters: IFilterType[]
 }
 
 export default IData

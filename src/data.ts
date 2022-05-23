@@ -8,15 +8,15 @@ const initialData: IData = {
         {id: 'Date', type: 'Date'},
     ],
     tableItems: [
-        {id: 'item-1', type: 'String', value: randomValueGenerator('String')},
-        {id: 'item-2', type: 'Date', value: randomValueGenerator('Date')},
-        {id: 'item-3', type: 'Number', value: randomValueGenerator('Number')},
-        {id: 'item-4', type: 'String', value: randomValueGenerator('String')},
-        {id: 'item-5', type: 'Number', value: randomValueGenerator('Number')},
-        {id: 'item-6', type: 'String', value: randomValueGenerator('String')},
-        {id: 'item-7', type: 'Boolean', value: randomValueGenerator('Boolean')},
+        {id: 'item-1', type: 'String', value: randomValueGenerator('String'), show: true},
+        {id: 'item-2', type: 'Date', value: randomValueGenerator('Date'), show: true},
+        {id: 'item-3', type: 'Number', value: randomValueGenerator('Number'), show: true},
+        {id: 'item-4', type: 'String', value: randomValueGenerator('String'), show: true},
+        {id: 'item-5', type: 'Number', value: randomValueGenerator('Number'), show: true},
+        {id: 'item-6', type: 'String', value: randomValueGenerator('String'), show: true},
+        {id: 'item-7', type: 'Boolean', value: randomValueGenerator('Boolean'), show: true},
     ],
-    sortTypes: [
+    filters: [
         {type: 'Number', checked: true},
         {type: 'String', checked: true},
         {type: 'Boolean', checked: true},

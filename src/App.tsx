@@ -1,15 +1,46 @@
 import React, {useEffect, useState} from 'react'
-import {CustomTable, data, ITableItem, onAdd, onSwap, randomValueGenerator, Sidebar} from './exports'
+import {CustomTable, data, IFilterType, onAdd, onFilterUpdate, onSwap, Sidebar} from './exports'
 import {Container, Grid, Typography} from '@mui/material'
 import {DragDropContext} from 'react-beautiful-dnd'
 
-function App() {
+const App = () => {
     const [state, setState] = useState(data)
 
     useEffect(() => {
-        console.log(state)
-    },[state])
+        const filters = state.filters
 
+        const items = state.tableItems
+
+        let filteredItems: any[] = []
+
+        items.map((item) => {
+            filters.filter((filter) => {
+                if (item.type === filter.type) {
+                    filteredItems.push({...item, show: filter.checked})
+                }
+            })
+        })
+
+        const updatedState = {
+            ...state,
+            tableItems: [...filteredItems]
+        }
+
+        setState(updatedState)
+
+    }, [state.filters])
+
+    const onFiltersChange = (toggled: IFilterType) => {
+
+        const updatedFilters = onFilterUpdate(state, toggled)
+
+        const updatedState = {
+            ...state,
+            filters: [...updatedFilters]
+        }
+
+        setState(updatedState)
+    }
 
 
     const onDrag = (result: any) => {
@@ -38,7 +69,7 @@ function App() {
             >
                 <Grid container spacing={5} py={5}>
                     <Grid item xs={3}>
-                        <Sidebar state={state}/>
+                        <Sidebar state={state} onFiltersChange={onFiltersChange}/>
                     </Grid>
                     <Grid item xs={9}>
                         <Typography variant='h5' gutterBottom>Table of content</Typography>
