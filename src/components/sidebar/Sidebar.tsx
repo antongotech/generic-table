@@ -3,24 +3,21 @@ import {Typography} from '@mui/material'
 import {CellsController, SidebarItem} from '../../exports'
 import {Draggable, Droppable} from 'react-beautiful-dnd'
 
-const Sidebar: React.FC<{ state: any, types: any, setTypes: Function }> = ({state, types, setTypes}) => {
-
-    const typesCol = state.lists.cellTypes
-    const typesItems = typesCol.listIds.map((item: any) => state.cellTypes[item])
+const Sidebar: React.FC<{ state: any}> = ({state}) => {
 
     return (
         <div>
             <Typography variant='h5' gutterBottom textAlign='center'>
-                {typesCol.title}
+                Available Cells
             </Typography>
             <div className='sidebar'>
-                <Droppable droppableId={typesCol.id}>
+                <Droppable droppableId='cellTypes'>
                     {provided => (
                         <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            {typesItems.map((item: any, index: number) => (
+                            {state.cellTypes.map((item: any, index: number) => (
                                 <Draggable key={item.id} draggableId={item.id} index={index}>
                                     {provided => (
                                         <SidebarItem
@@ -37,7 +34,7 @@ const Sidebar: React.FC<{ state: any, types: any, setTypes: Function }> = ({stat
                         </div>
                     )}
                 </Droppable>
-                <CellsController types={types} setTypes={setTypes}/>
+                <CellsController />
             </div>
         </div>
     )
