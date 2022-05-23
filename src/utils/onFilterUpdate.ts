@@ -1,8 +1,8 @@
-import {IData, IFilterType} from '../exports'
+import {ICellType, IData} from '../exports'
 
-const onFilterUpdate = (state: IData, type: IFilterType) => {
+const onFilterUpdate = (state: IData, type: ICellType) => {
 
-    const updatedSort = state.filters.map((item) => {
+    const updatedSort = state.cellTypes.map((item) => {
             const currentItem = item
             if (item.type === type.type) {
                 currentItem.checked = !currentItem.checked

@@ -1,15 +1,12 @@
 import React from 'react'
 import {Typography} from '@mui/material'
-import {CellsController, SidebarItem} from '../../exports'
+import {CellsController, ICellType, IData, SidebarItem} from '../../exports'
 import {Draggable, Droppable} from 'react-beautiful-dnd'
 
-const Sidebar: React.FC<{ state: any, onFiltersChange: Function }> = ({state, onFiltersChange}) => {
+const Sidebar: React.FC<{ state: IData, onFiltersChange: Function }> = ({state, onFiltersChange}) => {
 
     return (
         <div>
-            <Typography variant='h5' gutterBottom textAlign='center'>
-                Available Cells
-            </Typography>
             <div className='sidebar'>
                 <Droppable droppableId='cellTypes'>
                     {provided => (
@@ -17,19 +14,26 @@ const Sidebar: React.FC<{ state: any, onFiltersChange: Function }> = ({state, on
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            {state.cellTypes.map((item: any, index: number) => (
-                                <Draggable key={item.id} draggableId={item.id} index={index}>
-                                    {provided => (
-                                        <SidebarItem
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            ref={provided.innerRef}
-                                        >
-                                            {item.type}
-                                        </SidebarItem>
-                                    )}
-                                </Draggable>
-                            ))}
+                            <Typography color='text.secondary' variant='h6' gutterBottom textAlign='center'>
+                                Available Cells
+                            </Typography>
+                            {state.cellTypes.map((item: ICellType, index: number) => {
+                                return item.checked
+                                    ? <Draggable key={item.id} draggableId={item.id} index={index}>
+                                        {provided => (
+                                            <SidebarItem
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                ref={provided.innerRef}
+                                            >
+                                                {item.type}
+                                            </SidebarItem>
+                                        )}
+                                    </Draggable>
+                                    : <SidebarItem>
+                                        {item.type}
+                                    </SidebarItem>
+                            })}
                             {provided.placeholder}
                         </div>
                     )}

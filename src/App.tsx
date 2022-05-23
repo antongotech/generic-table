@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react'
-import {CustomTable, data, IFilterType, onAdd, onFilterUpdate, onSwap, Sidebar} from './exports'
-import {Container, Grid, Typography} from '@mui/material'
+import {CustomTable, data, ICellType, ITableItem, onAdd, onFilterUpdate, onSwap, Sidebar} from './exports'
+import {Container, Grid} from '@mui/material'
 import {DragDropContext} from 'react-beautiful-dnd'
 
 const App = () => {
     const [state, setState] = useState(data)
 
+    const [selected, setSelected] = useState<string[]>([])
+
     useEffect(() => {
-        const filters = state.filters
+        const filters = state.cellTypes
 
         const items = state.tableItems
 
@@ -28,20 +30,48 @@ const App = () => {
 
         setState(updatedState)
 
-    }, [state.filters])
+    }, [state.cellTypes])
 
-    const onFiltersChange = (toggled: IFilterType) => {
+    const onSelect = (itemId?: string, all?: boolean) => {
 
+        all && setSelected(state.tableItems.map((item) => item.id))
+
+        if (!itemId) return
+
+        setSelected(prevState => [...prevState.filter((item) => item !== itemId), itemId])
+    }
+    const onDelete = () => {
+        let updatedTable: ITableItem[] = []
+
+        state.tableItems.map((item, i) => {
+            let add = true
+            selected.filter((sel) => {
+                if (sel === item.id) {
+                    add = false
+                }
+            })
+            add && updatedTable.push(item)
+        })
+
+        const updatedState = {
+            ...state,
+            tableItems: [...updatedTable]
+        }
+
+        setState(updatedState)
+        setSelected([])
+    }
+
+    const onFiltersChange = (toggled: ICellType) => {
         const updatedFilters = onFilterUpdate(state, toggled)
 
         const updatedState = {
             ...state,
-            filters: [...updatedFilters]
+            cellTypes: [...updatedFilters]
         }
 
         setState(updatedState)
     }
-
 
     const onDrag = (result: any) => {
         const {destination, source, draggableId} = result
@@ -64,16 +94,13 @@ const App = () => {
 
     return (
         <Container maxWidth='xl'>
-            <DragDropContext
-                onDragEnd={onDrag}
-            >
+            <DragDropContext onDragEnd={onDrag}>
                 <Grid container spacing={5} py={5}>
                     <Grid item xs={3}>
                         <Sidebar state={state} onFiltersChange={onFiltersChange}/>
                     </Grid>
                     <Grid item xs={9}>
-                        <Typography variant='h5' gutterBottom>Table of content</Typography>
-                        <CustomTable state={state}/>
+                        <CustomTable onDelete={onDelete} selected={selected} setSelected={onSelect} state={state}/>
                     </Grid>
                 </Grid>
             </DragDropContext>

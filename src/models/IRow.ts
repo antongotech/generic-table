@@ -3,6 +3,7 @@ interface IRow {
     type: string
     value: string | number | boolean | Date
     index: number
+    setSelected: Function
 }
 
 export default IRow
