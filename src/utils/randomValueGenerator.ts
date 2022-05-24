@@ -1,9 +1,9 @@
 const randomStrings = [
-    'I’m sick of following my dreams, man. I’m just going to ask where they’re going and hook up with ’em later.',
-    'My mother always used to say: The older you get, the better you get, unless you’re a banana.',
-    'I walk around like everything’s fine, but deep down, inside my shoe, my sock is sliding off.',
-    'I never feel more alone than when I’m trying to put sunscreen on my back.',
-    'A day without sunshine is like, you know, night.',
+    'Random string 1',
+    'Random string 2',
+    'Random string 3',
+    'Random string 4',
+    'Random string 5',
 ]
 
 const randomValueGenerator = (type: string) => {

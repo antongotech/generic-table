@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext, useEffect} from 'react'
 import {
     alpha,
     IconButton,
@@ -11,18 +11,15 @@ import {
     Tooltip,
     Typography
 } from '@mui/material'
-import {CustomRow, GenericCell, IData, ITableItem} from '../../exports'
+import {CustomRow, GenericCell, ITableItem} from '../../exports'
 import {Droppable} from 'react-beautiful-dnd'
 import DeleteIcon from '@mui/icons-material/Delete'
+import {StateContext} from '../../context/StateContext'
 
 const headers = ['Select', 'Position', 'Type', 'Value']
 
-const CustomTable: React.FC<{ state: IData, selected: string[], setSelected: Function, onDelete: Function }> = ({
-                                                                                                                    state,
-                                                                                                                    selected,
-                                                                                                                    setSelected,
-                                                                                                                    onDelete
-                                                                                                                }) => {
+const CustomTable: React.FC<{ onDelete: Function, onSelect: Function }> = ({onDelete, onSelect}) => {
+    const {state: {tableItems, selected}} = useContext(StateContext)
 
     return (
         <TableContainer component={Paper}>
@@ -62,7 +59,14 @@ const CustomTable: React.FC<{ state: IData, selected: string[], setSelected: Fun
                 <TableHead>
                     <TableRow>
                         {headers.map((col) =>
-                            <GenericCell setSelected={setSelected} key={col} heading={col !== 'Value'} data={col}/>)}
+                            <GenericCell
+                                key={col}
+                                selected={selected}
+                                setSelected={onSelect}
+                                heading={col !== 'Value'}
+                                data={col}
+                            />
+                        )}
                     </TableRow>
                 </TableHead>
                 <Droppable droppableId='tableItems'>
@@ -71,18 +75,20 @@ const CustomTable: React.FC<{ state: IData, selected: string[], setSelected: Fun
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
-                            {state.tableItems.map((item: ITableItem, index: number) => (
+                            {tableItems.map((item: ITableItem, index: number) => (
                                 item.show && <CustomRow
                                     key={item.id}
                                     index={index}
                                     id={item.id}
+                                    internalState={item.selected}
                                     value={item.value}
                                     type={item.type}
-                                    setSelected={setSelected}
+                                    selected={selected}
+                                    setSelected={onSelect}
                                 />
                             ))}
                             {provided.placeholder}
-                            {!state.tableItems.length && <div style={{minHeight: 75}}/>}
+                            {!tableItems.length && <div style={{minHeight: 75}}/>}
                         </TableBody>
                     )}
                 </Droppable>

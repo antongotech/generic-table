@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Typography} from '@mui/material'
-import {CellsController, ICellType, IData, SidebarItem} from '../../exports'
+import {CellsController, ICellType, SidebarItem} from '../../exports'
 import {Draggable, Droppable} from 'react-beautiful-dnd'
+import {StateContext} from "../../context/StateContext";
 
-const Sidebar: React.FC<{ state: IData, onFiltersChange: Function }> = ({state, onFiltersChange}) => {
+const Sidebar: React.FC<{ onFiltersChange: Function }> = ({onFiltersChange}) => {
+    const {state: {cellTypes}} = useContext(StateContext)
 
     return (
         <div>
@@ -17,7 +19,7 @@ const Sidebar: React.FC<{ state: IData, onFiltersChange: Function }> = ({state, 
                             <Typography color='text.secondary' variant='h6' gutterBottom textAlign='center'>
                                 Available Cells
                             </Typography>
-                            {state.cellTypes.map((item: ICellType, index: number) => {
+                            {cellTypes.map((item: ICellType, index: number) => {
                                 return item.checked
                                     ? <Draggable key={item.id} draggableId={item.id} index={index}>
                                         {provided => (
@@ -38,7 +40,7 @@ const Sidebar: React.FC<{ state: IData, onFiltersChange: Function }> = ({state, 
                         </div>
                     )}
                 </Droppable>
-                <CellsController state={state} onFiltersChange={onFiltersChange}/>
+                <CellsController cellTypes={cellTypes} onFiltersChange={onFiltersChange}/>
             </div>
         </div>
     )

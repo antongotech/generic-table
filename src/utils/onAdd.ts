@@ -21,8 +21,6 @@ const onAdd = (state: IData, arrayTo: string, arrayFrom: string, expectedPositio
         selected: false,
     }
 
-    console.log(newItem)
-
     items.splice(expectedPosition, 0, newItem)
 
     return items

@@ -2,11 +2,13 @@ import React from 'react'
 import {Checkbox, Chip, TableCell} from '@mui/material'
 import {Colors, CustomCheckbox, getColor, ICell} from '../../exports'
 
-const GenericCell: React.FC<ICell> = ({heading, data, chip, setSelected, id}) => {
+const GenericCell: React.FC<ICell> = ({heading, data, chip, selected, setSelected, id}) => {
     const formattedData = data?.toString() || ''
 
     if (formattedData === 'checkbox')
-        return <TableCell sx={{width: '10vw'}}> <CustomCheckbox id={id} setSelected={setSelected} data={false}/></TableCell>
+        return <TableCell sx={{width: '10vw'}}>
+            <CustomCheckbox id={id} selected={selected} setSelected={setSelected}/>
+        </TableCell>
 
     if (chip)
         return <TableCell sx={{width: '10vw'}} component="th" scope="row">
@@ -20,7 +22,8 @@ const GenericCell: React.FC<ICell> = ({heading, data, chip, setSelected, id}) =>
         return (
             <TableCell>
                 <Checkbox
-                    color="primary"
+                    checked={selected?.length ? true : false}
+                    color="secondary"
                     onClick={() => setSelected && setSelected('', true)}
                     inputProps={{
                         'aria-label': 'select all',

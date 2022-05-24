@@ -20,4 +20,4 @@ export {default as onAdd} from './utils/onAdd'
 export {default as onSwap} from './utils/onSwap'
 export {default as onFilterUpdate} from './utils/onFilterUpdate'
 
-export {default as data} from './data'
+export {default as StateContextWrapper} from './context/StateContext'

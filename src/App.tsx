@@ -1,19 +1,18 @@
-import React, {useEffect, useState} from 'react'
-import {CustomTable, data, ICellType, ITableItem, onAdd, onFilterUpdate, onSwap, Sidebar} from './exports'
+import React, {useContext} from 'react'
+import {CustomTable, ICellType, ITableItem, onAdd, onFilterUpdate, onSwap, Sidebar} from './exports'
 import {Container, Grid} from '@mui/material'
 import {DragDropContext} from 'react-beautiful-dnd'
+import {StateContext} from './context/StateContext'
 
 const App = () => {
-    const [state, setState] = useState(data)
+    const {state, updateState} = useContext(StateContext)
 
-    const [selected, setSelected] = useState<string[]>([])
-
-    useEffect(() => {
+    const filterItems = () => {
         const filters = state.cellTypes
 
         const items = state.tableItems
 
-        let filteredItems: any[] = []
+        let filteredItems: ITableItem[] = []
 
         items.map((item) => {
             filters.filter((filter) => {
@@ -28,24 +27,40 @@ const App = () => {
             tableItems: [...filteredItems]
         }
 
-        setState(updatedState)
-
-    }, [state.cellTypes])
+        updateState(updatedState)
+    }
 
     const onSelect = (itemId?: string, all?: boolean) => {
+        let toggle
 
-        all && setSelected(state.tableItems.map((item) => item.id))
+        if (!itemId && !all) return
 
-        if (!itemId) return
+        if (all) {
+            updateState({
+                ...state,
+                selected: state.selected.length === state.tableItems.length ? [] : state.tableItems.map((item) => item.id)
+            })
+            return
+        }
 
-        setSelected(prevState => [...prevState.filter((item) => item !== itemId), itemId])
+        state.selected.map((item) => {
+            if (item === itemId) {
+                toggle = true
+                const updatedSelects = [...state.selected.filter((i) => i !== itemId)]
+                updateState({...state, selected: updatedSelects})
+            }
+        })
+
+        if (toggle) return
+
+        itemId && updateState({...state, selected: [...state.selected.filter((item) => item !== itemId), itemId]})
     }
     const onDelete = () => {
         let updatedTable: ITableItem[] = []
 
         state.tableItems.map((item, i) => {
             let add = true
-            selected.filter((sel) => {
+            state.selected.filter((sel) => {
                 if (sel === item.id) {
                     add = false
                 }
@@ -55,11 +70,11 @@ const App = () => {
 
         const updatedState = {
             ...state,
-            tableItems: [...updatedTable]
+            tableItems: [...updatedTable],
+            selected: [],
         }
 
-        setState(updatedState)
-        setSelected([])
+        updateState(updatedState)
     }
 
     const onFiltersChange = (toggled: ICellType) => {
@@ -70,7 +85,8 @@ const App = () => {
             cellTypes: [...updatedFilters]
         }
 
-        setState(updatedState)
+        updateState(updatedState)
+        filterItems()
     }
 
     const onDrag = (result: any) => {
@@ -89,7 +105,7 @@ const App = () => {
             ...state,
             [destination.droppableId]: updatedArray,
         }
-        setState(updatedState)
+        updateState(updatedState)
     }
 
     return (
@@ -97,10 +113,10 @@ const App = () => {
             <DragDropContext onDragEnd={onDrag}>
                 <Grid container spacing={5} py={5}>
                     <Grid item xs={3}>
-                        <Sidebar state={state} onFiltersChange={onFiltersChange}/>
+                        <Sidebar onFiltersChange={onFiltersChange}/>
                     </Grid>
                     <Grid item xs={9}>
-                        <CustomTable onDelete={onDelete} selected={selected} setSelected={onSelect} state={state}/>
+                        <CustomTable onSelect={onSelect} onDelete={onDelete}/>
                     </Grid>
                 </Grid>
             </DragDropContext>
