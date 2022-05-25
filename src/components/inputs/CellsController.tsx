@@ -11,12 +11,14 @@ const CellsController: React.FC<{ cellTypes: ICellType[], onFiltersChange: Funct
                     Filters
                 </Typography>
                 <Box display='flex' flexWrap='wrap' justifyContent='center'>
-                    {cellTypes.map((type: ICellType) => <FormControlLabel
+                    {cellTypes.map((type: ICellType) =>
+                        <FormControlLabel
                             sx={{color: 'text.secondary'}}
                             label={type.type}
                             key={type.type}
                             control={
-                                <Checkbox checked={type.checked} onChange={(e) => onFiltersChange(type)}/>}
+                                <Checkbox checked={type.checked} onChange={(e) => onFiltersChange(type)}/>
+                            }
                         />
                     )}
                 </Box>

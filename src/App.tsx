@@ -5,14 +5,12 @@ import {DragDropContext} from 'react-beautiful-dnd'
 import {StateContext} from './context/StateContext'
 
 const App = () => {
-    const {state, updateState} = useContext(StateContext)
+    const {state, state: {cellTypes, selected, tableItems}, updateState} = useContext(StateContext)
 
     const filterItems = () => {
-        const filters = state.cellTypes
-
-        const items = state.tableItems
-
-        let filteredItems: ITableItem[] = []
+        const filters = cellTypes
+        const items = tableItems
+        const filteredItems: ITableItem[] = []
 
         items.map((item) => {
             filters.filter((filter) => {
@@ -22,45 +20,18 @@ const App = () => {
             })
         })
 
-        const updatedState = {
+        updateState({
             ...state,
             tableItems: [...filteredItems]
-        }
-
-        updateState(updatedState)
-    }
-
-    const onSelect = (itemId?: string, all?: boolean) => {
-        let toggle
-
-        if (!itemId && !all) return
-
-        if (all) {
-            updateState({
-                ...state,
-                selected: state.selected.length === state.tableItems.length ? [] : state.tableItems.map((item) => item.id)
-            })
-            return
-        }
-
-        state.selected.map((item) => {
-            if (item === itemId) {
-                toggle = true
-                const updatedSelects = [...state.selected.filter((i) => i !== itemId)]
-                updateState({...state, selected: updatedSelects})
-            }
         })
-
-        if (toggle) return
-
-        itemId && updateState({...state, selected: [...state.selected.filter((item) => item !== itemId), itemId]})
     }
-    const onDelete = () => {
-        let updatedTable: ITableItem[] = []
 
-        state.tableItems.map((item, i) => {
+    const onDelete = () => {
+        const updatedTable: ITableItem[] = []
+
+        tableItems.map((item) => {
             let add = true
-            state.selected.filter((sel) => {
+            selected.filter((sel) => {
                 if (sel === item.id) {
                     add = false
                 }
@@ -68,24 +39,20 @@ const App = () => {
             add && updatedTable.push(item)
         })
 
-        const updatedState = {
+        updateState({
             ...state,
             tableItems: [...updatedTable],
-            selected: [],
-        }
-
-        updateState(updatedState)
+            selected: []
+        })
     }
 
     const onFiltersChange = (toggled: ICellType) => {
         const updatedFilters = onFilterUpdate(state, toggled)
 
-        const updatedState = {
+        updateState({
             ...state,
             cellTypes: [...updatedFilters]
-        }
-
-        updateState(updatedState)
+        })
         filterItems()
     }
 
@@ -101,11 +68,10 @@ const App = () => {
             updatedArray = onSwap(state, destination.droppableId, destination.index, source.index, draggableId)
         }
 
-        const updatedState = {
+        updateState({
             ...state,
             [destination.droppableId]: updatedArray,
-        }
-        updateState(updatedState)
+        })
     }
 
     return (

@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import {Typography} from '@mui/material'
 import {CellsController, ICellType, SidebarItem} from '../../exports'
 import {Draggable, Droppable} from 'react-beautiful-dnd'
-import {StateContext} from "../../context/StateContext";
+import {StateContext} from '../../context/StateContext'
 
 const Sidebar: React.FC<{ onFiltersChange: Function }> = ({onFiltersChange}) => {
     const {state: {cellTypes}} = useContext(StateContext)

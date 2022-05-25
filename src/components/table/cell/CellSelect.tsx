@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import {Checkbox, TableCell} from '@mui/material'
-import {StateContext} from "../../../context/StateContext";
+import {StateContext} from '../../../context/StateContext'
 
 const CellSelect = () => {
     const {state, updateState} = useContext(StateContext)
