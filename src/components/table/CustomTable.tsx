@@ -61,8 +61,6 @@ const CustomTable: React.FC<{ onDelete: Function, onSelect: Function }> = ({onDe
                         {headers.map((col) =>
                             <GenericCell
                                 key={col}
-                                selected={selected}
-                                setSelected={onSelect}
                                 heading={col !== 'Value'}
                                 data={col}
                             />

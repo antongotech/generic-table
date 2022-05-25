@@ -14,7 +14,7 @@ const CustomRow: React.FC<IRow> = ({id, type, value, index, selected, internalSt
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                 >
-                    <GenericCell internalState={internalState} id={id} selected={selected} setSelected={setSelected} heading data='checkbox'/>
+                    <GenericCell internalState={internalState} id={id} heading data='checkbox'/>
                     <GenericCell heading data={index + 1}/>
                     <GenericCell heading data={type} chip={true}/>
                     <GenericCell data={value}/>

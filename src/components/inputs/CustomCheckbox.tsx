@@ -1,22 +1,30 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext} from 'react'
 import {Checkbox} from '@mui/material'
+import {StateContext} from '../../context/StateContext'
 
-const CustomCheckbox: React.FC<{ id: string | undefined, selected: string[] | undefined, setSelected: Function | undefined }> =
-    ({id, setSelected, selected}) => {
-        const [state, setState] = useState<boolean>(false)
+const CustomCheckbox: React.FC<{ id: string | undefined }> =
+    ({id}) => {
+        const {state, updateState} = useContext(StateContext)
 
-        useEffect(() => {
-            selected?.map((item) => {
-                item === id && setState(true)
-                !selected?.length && setState(false)
-            })
-        }, [selected])
+        const currentItem = state.tableItems.filter((item) => item.id === id)
 
         return <Checkbox
-            checked={state}
+            checked={currentItem[0].selected}
             onChange={() => {
-                setState(prevState => !prevState)
-                setSelected && setSelected(id)
+                currentItem[0].selected = !currentItem[0].selected
+
+                const updatedTable = state.tableItems.filter((item) => {
+                    return item.id === id ? currentItem[0] : item
+                })
+
+                const newState = {
+                    ...state,
+                    tableItems: [...updatedTable],
+                    selected: currentItem[0].selected ? [...state.selected, currentItem[0].id] : [...state.selected]
+                }
+
+                updateState(newState)
+
             }}
             inputProps={{'aria-label': 'controlled'}}
         />
