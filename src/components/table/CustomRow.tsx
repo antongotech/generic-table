@@ -3,7 +3,7 @@ import {GenericCell, IRow} from '../../exports'
 import {Draggable} from 'react-beautiful-dnd'
 import {TableRow} from '@mui/material'
 
-const CustomRow: React.FC<IRow> = ({id, type, value, index, selected, internalState, setSelected}) => {
+const CustomRow: React.FC<IRow> = ({id, type, value, index, internalState}) => {
     return (
         <Draggable draggableId={id} index={index}>
             {(provided) => (

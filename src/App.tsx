@@ -116,7 +116,7 @@ const App = () => {
                         <Sidebar onFiltersChange={onFiltersChange}/>
                     </Grid>
                     <Grid item xs={9}>
-                        <CustomTable onSelect={onSelect} onDelete={onDelete}/>
+                        <CustomTable onDelete={onDelete}/>
                     </Grid>
                 </Grid>
             </DragDropContext>

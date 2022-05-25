@@ -30,7 +30,7 @@ const StateContextWrapper = (props: any) => {
     const [newState, setNewState] = useState(state)
 
     useEffect(() => {
-        console.log('context upd:', newState)
+        console.log('context updated:', newState)
     }, [newState])
 
     const updateState = (newState: IData) => {
